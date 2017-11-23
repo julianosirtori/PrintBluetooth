@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PrintBluetooth</string>
+    <string name="conectar">Conectar</string>
+    <string name="imprimir">Imprimir Texto</string>
+    <string name="desconectar">Desconectar</string>
+    <string name="imprimir_code_128">Imprimir Code 128</string>
+    <string name="imprmir_code_38">Imprmir Code 38</string>
+    <string name="imprmir_bitmap_default">Imprmir Bitmap Default</string>
+</resources>

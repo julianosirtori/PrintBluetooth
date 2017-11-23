@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="br.com.rpinfo.printbluetooth.MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="BIBLIOTECA BLUETOOH"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnConectar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conectar" />
+
+            <EditText
+                android:id="@+id/edtTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnImprimirTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/imprimir" />
+
+            <Button
+                android:id="@+id/btnCode128"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/imprimir_code_128" />
+
+            <Button
+                android:id="@+id/btnCode38"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/imprmir_code_38" />
+
+            <Button
+                android:id="@+id/btnBitmapDefault"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/imprmir_bitmap_default" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
