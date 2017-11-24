@@ -1,5 +1,6 @@
-package br.com.rpinfo.printbluetooth.bluetooth;
+package br.com.rpinfo.auximpressorabluetooth;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.rpinfo.printbluetooth.bluetooth.Exception.PrinterBluetoothException;
+import br.com.rpinfo.auximpressorabluetooth.Exception.PrinterBluetoothException;
 
 /**
  * Criado por Juliano Sirtori em 23/11/2017.
@@ -40,7 +41,12 @@ public class ManagerBluetooth {
     public boolean ativaBluetooth() {
         if (!btfAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            context.startActivity(enableIntent);
+            if (context instanceof Activity) {
+                ((Activity) context).startActivityForResult(enableIntent, ManagerBluetooth.CODE_ACTIVE_BLUETOOTH);
+            } else {
+                context.startActivity(enableIntent);
+            }
+
             return false;
         }
         return true;

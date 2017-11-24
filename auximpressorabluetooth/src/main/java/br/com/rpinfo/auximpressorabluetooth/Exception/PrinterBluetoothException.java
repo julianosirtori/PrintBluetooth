@@ -1,4 +1,4 @@
-package br.com.rpinfo.printbluetooth.bluetooth.Exception;
+package br.com.rpinfo.auximpressorabluetooth.Exception;
 
 /**
  * Criado por Juliano Sirtori em 23/11/2017.

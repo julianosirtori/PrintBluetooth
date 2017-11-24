@@ -1,4 +1,4 @@
-package br.com.rpinfo.printbluetooth.bluetooth;
+package br.com.rpinfo.auximpressorabluetooth;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;

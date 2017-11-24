@@ -1,4 +1,4 @@
-package br.com.rpinfo.printbluetooth.bluetooth;
+package br.com.rpinfo.auximpressorabluetooth;
 
 /**
  * Codigo importado da biblioteca do GPPrint (gprintersdkv2.1.4.jar)
