@@ -40,6 +40,7 @@ public class ManagerBluetooth {
     public boolean ativaBluetooth() {
         if (!btfAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            context.startActivity(enableIntent);
             return false;
         }
         return true;
@@ -49,7 +50,7 @@ public class ManagerBluetooth {
      * Retorna Dispositivos pareados
      */
     public List<BluetoothDevice> getDispositivosPareados() {
-        if (!btfAdapter.isEnabled()) {
+        if (btfAdapter.isEnabled()) {
             return new ArrayList<BluetoothDevice>(btfAdapter.getBondedDevices());
         }
         return null;
@@ -60,7 +61,6 @@ public class ManagerBluetooth {
         if (device != null) {
             try {
                 socket = device.createRfcommSocketToServiceRecord(uuid);
-                socket.connect();
             } catch (IOException e) {
                 e.printStackTrace();
             }

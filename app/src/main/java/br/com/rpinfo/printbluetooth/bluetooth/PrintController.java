@@ -23,9 +23,12 @@ public class PrintController {
 
     public PrintController(BluetoothSocket socket) throws IOException {
         this.socket = socket;
-        this.in = socket.getInputStream();
-        this.out = socket.getOutputStream();
+        this.socket.connect();
+
+        this.in = this.socket.getInputStream();
+        this.out = this.socket.getOutputStream();
         this.running = true;
+
     }
 
     public boolean sendPrint(byte[] bytes) throws IOException {
