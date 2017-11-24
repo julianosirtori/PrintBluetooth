@@ -1,7 +1,8 @@
 package br.com.rpinfo.printbluetooth.bluetooth;
 
 /**
- * Criado por Juliano Sirtori em 23/11/2017.
+ * Codigo importado da biblioteca do GPPrint (gprintersdkv2.1.4.jar)
+ * que se encontra nesse respositorio https://github.com/android9527/GpSample
  */
 
 import android.graphics.Bitmap;
