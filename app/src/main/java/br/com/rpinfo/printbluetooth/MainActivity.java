@@ -1,29 +1,35 @@
 package br.com.rpinfo.printbluetooth;
 
+import android.Manifest;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import org.apache.commons.lang.ArrayUtils;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Vector;
 
-import br.com.rpinfo.printbluetooth.bluetooth.EscCommand;
-import br.com.rpinfo.printbluetooth.bluetooth.Exception.PrinterBluetoothException;
-import br.com.rpinfo.printbluetooth.bluetooth.ManagerBluetooth;
-import br.com.rpinfo.printbluetooth.bluetooth.PrintController;
+import br.com.rpinfo.auximpressorabluetooth.EscCommand;
+import br.com.rpinfo.auximpressorabluetooth.Exception.PrinterBluetoothException;
+import br.com.rpinfo.auximpressorabluetooth.ManagerBluetooth;
+import br.com.rpinfo.auximpressorabluetooth.PrintController;
+
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
     ManagerBluetooth managerBluetooth;
     List<BluetoothDevice> bluetoothDevices;
     PrintController printController;
@@ -48,6 +54,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ((Button) findViewById(R.id.btnCodeBar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EscCommand escCommand = new EscCommand();
+                escCommand.addText("Print Code 128\n");
+//                escCommand.addSelectPrintingPositionForHRICharacters(EscCommand.HRI_POSITION.BELOW);//Defina o código de barras para reconhecer a posição do caractere abaixo do código de barra
+                escCommand.addSetBarcodeHeight((byte) 60); //Defina a altura do código de barras para 60 pontos
+                escCommand.addCODE128("12345678");  //Código de impressão 128 jardas - 8 caractereres tamanho maximo
+                escCommand.addCODE39("1234567");  //Código de impressão 39 jardas - 7 caracteres tamanho maximo
+                escCommand.addPrintAndLineFeed();
+//                escCommand.addSelectJustification(EscCommand.JUSTIFICATION.CENTER);
+                try {
+                    if (printController != null) {
+                        printController.sendPrint(escCommand.getBytes());
+                    } else {
+                        Toast.makeText(MainActivity.this, "Conecte primeiro", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         ((Button) findViewById(R.id.btnImprimirTexto)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,11 +89,27 @@ public class MainActivity extends AppCompatActivity {
                 escCommand.addText("\n");
                 escCommand.addSelectJustification(EscCommand.JUSTIFICATION.CENTER);
                 try {
-                    printController.sendPrint(escCommand.getBytes());
+                    if (printController != null) {
+                        printController.sendPrint(escCommand.getBytes());
+                    } else {
+                        Toast.makeText(MainActivity.this, "Conecte primeiro", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
+            }
+        });
+
+        ((Button) findViewById(R.id.btnFoto)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                            Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
+                } else {
+                    dispatchTakePictureIntent();
+                }
             }
         });
 
@@ -75,18 +120,56 @@ public class MainActivity extends AppCompatActivity {
                 escCommand.addRastBitImage(BitmapFactory.decodeResource(getResources(),
                         R.drawable.etiqueta), 100, 1);
 
-                Vector<Byte> datas = escCommand.getCommand();
-                Byte[] Bytes = datas.toArray(new Byte[datas.size()]);
-                byte[] bytes = ArrayUtils.toPrimitive(Bytes);
-
                 try {
-                    printController.sendPrint(bytes);
+                    if (printController != null) {
+                        printController.sendPrint(escCommand.getBytes());
+                    } else {
+                        Toast.makeText(MainActivity.this, "Conecte primeiro", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                EscCommand escCommand = new EscCommand();
+                escCommand.addRastBitImage(imageBitmap, 100, 1);
+
+                try {
+                    if (printController != null) {
+                        printController.sendPrint(escCommand.getBytes());
+                    } else {
+                        Toast.makeText(MainActivity.this, "Conecte primeiro", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == ManagerBluetooth.CODE_ACTIVE_BLUETOOTH) {
+                initBluetooth();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            dispatchTakePictureIntent();
+        }
+    }
+
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     private void conectar() {
@@ -141,8 +224,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+
 }

@@ -43,16 +43,16 @@
                 android:text="@string/imprimir" />
 
             <Button
-                android:id="@+id/btnCode128"
+                android:id="@+id/btnFoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/imprimir_code_128" />
+                android:text="@string/tirar_foto_e_imprimir" />
 
             <Button
-                android:id="@+id/btnCode38"
+                android:id="@+id/btnCodeBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/imprmir_code_38" />
+                android:text="@string/imprimir_code_bar" />
 
             <Button
                 android:id="@+id/btnBitmapDefault"

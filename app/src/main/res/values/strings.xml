@@ -6,4 +6,6 @@
     <string name="imprimir_code_128">Imprimir Code 128</string>
     <string name="imprmir_code_38">Imprmir Code 38</string>
     <string name="imprmir_bitmap_default">Imprmir Bitmap Default</string>
+    <string name="tirar_foto_e_imprimir">Tirar Foto e imprimir</string>
+    <string name="imprimir_code_bar">Imprimir Code Bar</string>
 </resources>
